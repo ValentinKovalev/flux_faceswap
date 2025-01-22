@@ -1,0 +1,66 @@
+# Model weights and checkpoints
+models/
+weights/
+checkpoints/
+*.zip
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Generated outputs
+output/
+results/
+inputs/
+!input/example.png
+!input/example_face.jpg
+
+# Cache and temporary files
+temp/
+tmp/
+.tmp/
+__pycache__/
+*.py[cod]
+*$py.class
+.cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs and debugging
+*.log
+logs/
+tb_logger/
+wandb/
+lightning_logs/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+
+# Web extensions (except core)
+web/extensions/*
+!/web/extensions/core/
+!/web/extensions/example.js
+
+# Configuration
+extra_model_paths.yaml
+config/*
+!config/examples/
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
