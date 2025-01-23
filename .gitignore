@@ -1,12 +1,11 @@
 # Model weights and checkpoints
-models/
 weights/
-checkpoints/
 *.zip
 *.pth
 *.pt
 *.ckpt
 *.safetensors
+*onnx
 
 # Generated outputs
 output/
@@ -15,6 +14,8 @@ inputs/
 !input/example.png
 !input/example_face.jpg
 
+# workspaces
+user/default/
 # Cache and temporary files
 temp/
 tmp/

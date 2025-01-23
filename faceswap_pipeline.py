@@ -3,6 +3,16 @@ import random
 import sys
 from typing import Sequence, Mapping, Any, Union
 import torch
+import base64
+import requests
+import os
+from dotenv import load_dotenv
+import cv2
+import mediapipe as mp
+import numpy as np
+import os
+from pathlib import Path
+from loguru import logger
 
 
 def get_value_at_index(obj: Union[Sequence, Mapping], index: int) -> Any:
@@ -114,8 +124,14 @@ def import_custom_nodes() -> None:
 
 from nodes import NODE_CLASS_MAPPINGS
 
+BASE_PROMPT = """Realistic skin texture, young woman's face 20-25 years old is illuminated by soft, 
+        natural light, highlighting her calm and confident expression. Her smooth, fair skin contrasts with her striking,
+        thick eyebrows and sharp, defined cheekbones. Her full, slightly parted lips have a natural pink hue,
+        adding to her elegance. Her bright, piercing green eyes are framed by long lashes, 
+        drawing attention to her gaze. The light blonde hair flows naturally around her face, 
+        and a silver necklace with a winged pendant adds a touch of sophistication. Super Realism."""
 
-def main():
+def main(in_img, in_face_img, input_prompt = BASE_PROMPT, output_path = "output"):
     import_custom_nodes()
     with torch.inference_mode():
         unetloader = NODE_CLASS_MAPPINGS["UNETLoader"]()
@@ -134,20 +150,22 @@ def main():
         loraloader = NODE_CLASS_MAPPINGS["LoraLoader"]()
         loraloader_122 = loraloader.load_lora(
             lora_name="super-realism.safetensors",
-            strength_model=0.3,
-            strength_clip=0.7000000000000001,
+            strength_model=0.35000000000000003,
+            strength_clip=0.6,
             model=get_value_at_index(unetloader_63, 0),
             clip=get_value_at_index(dualcliploader_64, 0),
         )
 
         cliptextencode = NODE_CLASS_MAPPINGS["CLIPTextEncode"]()
         cliptextencode_6 = cliptextencode.encode(
-            text="realistic skin texture, woman's face is illuminated by cold, dim light, highlighting her tense expression. Her skin is glistening with sweat, accentuating her sharp cheekbones and slightly parted lips, which suggest a mix of shock and fear. Faint dirt smudges and subtle abrasions on her face contribute to an atmosphere of distress and urgency.",
+            text=input_prompt,
             clip=get_value_at_index(loraloader_122, 1),
         )
 
         vaeloader = NODE_CLASS_MAPPINGS["VAELoader"]()
-        vaeloader_10 = vaeloader.load_vae(vae_name="ae.safetensors")
+        vaeloader_10 = vaeloader.load_vae(
+            vae_name="diffusion_pytorch_model.safetensors"
+        )
 
         ksamplerselect = NODE_CLASS_MAPPINGS["KSamplerSelect"]()
         ksamplerselect_16 = ksamplerselect.get_sampler(sampler_name="euler")
@@ -169,18 +187,14 @@ def main():
         )
 
         loadimage = NODE_CLASS_MAPPINGS["LoadImage"]()
-        loadimage_54 = loadimage.load_image(
-            image="clipspace/clipspace-mask-405645.2999999523.png [input]"
-        )
+        loadimage_54 = loadimage.load_image(image=in_face_img)
 
         fluxguidance = NODE_CLASS_MAPPINGS["FluxGuidance"]()
         fluxguidance_26 = fluxguidance.append(
-            guidance=3.5, conditioning=get_value_at_index(cliptextencode_6, 0)
+            guidance=2.5, conditioning=get_value_at_index(cliptextencode_6, 0)
         )
 
-        loadimage_104 = loadimage.load_image(
-            image="clipspace/clipspace-mask-2266529.4000000954.png [input]"
-        )
+        loadimage_104 = loadimage.load_image(image=in_img)
 
         inpaintmodelconditioning = NODE_CLASS_MAPPINGS["InpaintModelConditioning"]()
         inpaintmodelconditioning_70 = inpaintmodelconditioning.encode(
@@ -197,6 +211,7 @@ def main():
         basicguider = NODE_CLASS_MAPPINGS["BasicGuider"]()
         samplercustomadvanced = NODE_CLASS_MAPPINGS["SamplerCustomAdvanced"]()
         vaedecode = NODE_CLASS_MAPPINGS["VAEDecode"]()
+        saveimage = NODE_CLASS_MAPPINGS["SaveImage"]()
 
         for q in range(1):
             basicscheduler_17 = basicscheduler.get_sigmas(
@@ -207,7 +222,7 @@ def main():
             )
 
             applypulidflux_62 = applypulidflux.apply_pulid_flux(
-                weight=0.8,
+                weight=0.9,
                 start_at=0,
                 end_at=0.8,
                 fusion="mean",
@@ -220,7 +235,7 @@ def main():
                 eva_clip=get_value_at_index(pulidfluxevacliploader_51, 0),
                 face_analysis=get_value_at_index(pulidfluxinsightfaceloader_53, 0),
                 image=get_value_at_index(loadimage_54, 0),
-                unique_id=15121207877576056355,
+                unique_id=3909983138228746112,
             )
 
             basicguider_47 = basicguider.get_guider(
@@ -240,9 +255,149 @@ def main():
                 samples=get_value_at_index(samplercustomadvanced_92, 0),
                 vae=get_value_at_index(vaeloader_10, 0),
             )
-            def save_image(image, filename):
-                image.save(filename)
-            save_image(get_value_at_index(vaedecode_49, 0), f"output_{q}.png")
+
+            saveimage_123 = saveimage.save_images(
+                filename_prefix="faceswap_res", images=get_value_at_index(vaedecode_49, 0)
+            )
+        return saveimage_123
+
+
+
+def get_face_img_w_mask(in_img, save_dir='input'):
+    mp_face_mesh = mp.solutions.face_mesh
+    face_mesh = mp_face_mesh.FaceMesh(static_image_mode=True, max_num_faces=1)
+    
+    if isinstance(in_img, str):
+        image = cv2.imread(in_img)
+        input_name = Path(in_img).stem
+    else:
+        image = in_img
+        input_name = 'face_mask'
+        
+    if image is None:
+        return None
+        
+    height, width = image.shape[:2]
+
+    rgba_image = np.zeros((height, width, 4), dtype=np.uint8)
+    rgba_image[:,:,:3] = image
+    
+
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    results = face_mesh.process(image_rgb)
+    
+
+    mask = np.ones((height, width), dtype=np.uint8) * 255
+    
+    if results.multi_face_landmarks:
+        for face_landmarks in results.multi_face_landmarks:
+            points = []
+            for landmark in face_landmarks.landmark:
+                x = int(landmark.x * width)
+                y = int(landmark.y * height)
+                points.append([x, y])
+            
+            points = np.array(points, dtype=np.int32)
+            hull = cv2.convexHull(points)
+            
+
+            cv2.fillConvexPoly(mask, hull, 0)
+
+        rgba_image[:,:,3] = mask
+        os.makedirs(save_dir, exist_ok=True)
+
+        filename = f"{input_name}_w_mask.png"
+        output_path = os.path.join(save_dir, filename)
+        cv2.imwrite(output_path, rgba_image)
+        return filename
+    else:
+        return None
+
+
+
+def get_prompt_by_img_path(in_img_path, input_prompt):
+    load_dotenv()
+    api_key = os.getenv('OPENAI_API_KEY')
+    
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY not found in environment variables")
+        
+    with open(in_img_path, "rb") as image_file:
+        encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    payload = {
+        "model": "chatgpt-4o-latest",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "I have a different description prompt for a face, I need a description of image, essentially replacing all the entities with the ones relevant to the photo: " + input_prompt
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64,{encoded_image}"
+                        }
+                    }
+                ]
+            }
+        ],
+        "max_tokens": 1000
+    }
+    
+    try:
+        response = requests.post(
+            "https://api.openai.com/v1/chat/completions",
+            headers=headers,
+            json=payload
+        )
+        response.raise_for_status()
+
+        result = response.json()
+        generated_prompt = result["choices"][0]["message"]["content"]
+        
+        return generated_prompt.strip()
+        
+    except Exception as e:
+        print(f"Error making OpenAI API request: {e}")
+        return None
+
+def faceswap_process(
+    image_path="input/image2.webp",
+    face_img_path="example_face.jpg",
+    input_prompt=BASE_PROMPT,
+    output_dir="output/"
+):
+    
+    logger.info(f"Using image mask: {image_path}")
+    logger.info(f"Using face image: {face_img_path}")
+
+    in_img_w_mask_path = get_face_img_w_mask(image_path)
+    if in_img_w_mask_path is None:
+        logger.error(f"Failed to get face image with mask for {image_path}")
+        return
+    logger.info(f"Received face image: {in_img_w_mask_path}")
+    
+    logger.info(f"Receiving input prompt")
+    
+    input_prompt = get_prompt_by_img_path(face_img_path, BASE_PROMPT)
+    logger.info(f"Input prompt: {input_prompt}")
+    
+    # comfyui path hack
+    if face_img_path.startswith("input/"):
+        face_img_path = face_img_path.split("input/")[1]
+    output = main(in_img_w_mask_path, face_img_path, input_prompt, output_dir)
+    output_img = output["ui"]["images"][0]["filename"]
+    logger.info(f"Output image: {output_dir}/{output_img}")
+
 
 if __name__ == "__main__":
-    main()
+    faceswap_process()
+
