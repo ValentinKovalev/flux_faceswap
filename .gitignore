@@ -8,12 +8,19 @@ weights/
 *onnx
 
 # Generated outputs
-output/
+output/*
+!output/faceswap_res_1.png
+!output/faceswap_res_2.png
+!output/faceswap_res_3.png
+!output/faceswap_res_1_lora.png
+!output/faceswap_res_2_lora.png
+!output/faceswap_res_3_lora.png
 results/
-input/
+input/*
 !input/example.png
-!input/example_face.jpg
-
+!input/image2.webp
+!input/example3.png
+!input/img_face01.webp
 # workspaces
 user/default/
 # Cache and temporary files
