@@ -10,7 +10,7 @@ weights/
 # Generated outputs
 output/
 results/
-inputs/
+input/
 !input/example.png
 !input/example_face.jpg
 
