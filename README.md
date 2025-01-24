@@ -30,7 +30,21 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
 - [ ] Imporve base prompt for better face annotation
 - [ ] Replace mediapipe with something more accurate
 - [ ] Prod ready solution without using comfyui
+## Examples
 
+### Input Images
+![Source Face](input/example.png)
+![Target Image](input/img_face01.webp)
+
+### Faceswap Results
+![Result 1](output/faceswap_res_1.png)
+![Result 2](output/faceswap_res_2.png)
+![Result 3](output/faceswap_res_3.png)
+
+### Faceswap Results with lora
+![Result 1 with lora](output/faceswap_res_1_lora.png)
+![Result 2 with lora](output/faceswap_res_2_lora.png)
+![Result 3 with lora](output/faceswap_res_3_lora.png)
 
 ### Prerequisites
 
