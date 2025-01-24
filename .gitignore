@@ -21,8 +21,8 @@ input/*
 !input/image2.webp
 !input/example3.png
 !input/img_face01.webp
-# workspaces
-user/default/*
+# workflows
+# user/default/workflows/*
 !user/default/workflows/pulidmask_my_multi_lora.json
 # Cache and temporary files
 temp/
