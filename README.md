@@ -23,6 +23,7 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
 - ```python run_faceswap.py --input-image absolute/path/to/image --face-image /absolute/path/to/face/image```
 
 ## Next steps:
+- [ ] Replace mediapipe with something more accurate, that works with small faces and make accurate face segmentation mask
 - [ ] Add lora finetuning for bunch of photos
 - [ ] Add and experiment with different loras for improving realism
 - [ ] Using only face crop for generation and insert face crop with new face in original image
