@@ -5,11 +5,10 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
 ## Pipeline
 - Receiving segmentation mask for generation with mediapipe (could be improved)
 - Generating prompt using gpt VLM for face description (using base prompt as a format for better results), could be used florence-2, but gpt-4o is better
-- Using PulID with Flux.1-dev SOTA model
-- Using inpainting model
+- Using PulID with Flux.1-dev SOTA model for face generation with required face identity
+- Using inpainting model to generate face
 - Using lora for realism and better results
 - Add finetuned lora on a bunch of photos at workflow level, results are below
-
 
 ## Installation
  - install python 3.10
