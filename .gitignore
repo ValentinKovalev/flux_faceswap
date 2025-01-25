@@ -7,6 +7,13 @@ weights/
 *.safetensors
 *onnx
 
+#input images
+input/*
+!input/example1.png
+!input/example2.webp
+!input/example3.png
+!input/img_face01.webp
+
 # Generated outputs
 output/*
 !output/faceswap_res_1.png
@@ -16,11 +23,7 @@ output/*
 !output/faceswap_res_2_lora.png
 !output/faceswap_res_3_lora.png
 results/
-input/*
-!input/example.png
-!input/image2.webp
-!input/example3.png
-!input/img_face01.webp
+
 # workflows
 !user/default/workflows/pulidmask_my_multi_lora.json
 # Cache and temporary files

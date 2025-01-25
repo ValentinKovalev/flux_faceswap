@@ -3605,6 +3605,35 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 optree = ["optree (>=0.12.0)"]
 
 [[package]]
+name = "torchaudio"
+version = "2.5.1"
+description = "An audio package for PyTorch"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "torchaudio-2.5.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:901291d770aeeb1f51920bb5aa73ff82e9b7f26354a3c7b90d80ff0b4e9a5044"},
+    {file = "torchaudio-2.5.1-cp310-cp310-manylinux1_x86_64.whl", hash = "sha256:abacbec3b6d695cf99ada8b1db55db933181c8ff7d283e246e2bbefdde674235"},
+    {file = "torchaudio-2.5.1-cp310-cp310-manylinux2014_aarch64.whl", hash = "sha256:9b3872c5dd5080be6322908d62365581a1dd9250e3dd6d47bab3f5b0854a5d1f"},
+    {file = "torchaudio-2.5.1-cp310-cp310-win_amd64.whl", hash = "sha256:4aead2d6b32426d0e657e243f6f5146f8d400bc8db9fe8a8000254baeec1202d"},
+    {file = "torchaudio-2.5.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:7005354aa7dda9ef908e13c2566ee1fe0bd6d7f5bae0583b5e53016cd229fc34"},
+    {file = "torchaudio-2.5.1-cp311-cp311-manylinux1_x86_64.whl", hash = "sha256:7af3f7f92fd33bc9f036a60cdeda4cbeb6bccebd18eae89776dd1e8ed042672e"},
+    {file = "torchaudio-2.5.1-cp311-cp311-manylinux2014_aarch64.whl", hash = "sha256:4ba24769a72bd686903feaf1040c895d710af2ffbcd25ee7a9794ee285561b26"},
+    {file = "torchaudio-2.5.1-cp311-cp311-win_amd64.whl", hash = "sha256:cba8ccab1bff0496ccdc71ebbdcd31d0f7bf97ff3c46276425ff86460f6f8967"},
+    {file = "torchaudio-2.5.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:f1cbfdfd1bbdfbe7289d47a74f36ff6c5d87c3205606202fef5a7fb693f61cf0"},
+    {file = "torchaudio-2.5.1-cp312-cp312-manylinux1_x86_64.whl", hash = "sha256:9c8fb06fbd8d2016e7b7caf15a3231867c792a2e3b0f2f8f9013633e9c2ce412"},
+    {file = "torchaudio-2.5.1-cp312-cp312-manylinux2014_aarch64.whl", hash = "sha256:6bb65416405f40e00b20701257c16e7493bfdd7188e02e87cc5b389c31c10c2c"},
+    {file = "torchaudio-2.5.1-cp312-cp312-win_amd64.whl", hash = "sha256:ec8f12d6be12aed248a0d65a76c7bb341ee5eef969fe2e9dc3154c7cfba1bdf4"},
+    {file = "torchaudio-2.5.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:a40a0e4b238564a19bf138c64d593c7b52d97c8737843d85d6ca09216241ae66"},
+    {file = "torchaudio-2.5.1-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:f2f0a4fa19137cad247087dcf4b85c56860f924c3ca4a89679299cf0e002ee33"},
+    {file = "torchaudio-2.5.1-cp39-cp39-manylinux2014_aarch64.whl", hash = "sha256:d29349944955eb061e774fe4d9eea4681c5bc9ff42ea39a877f8f14de1e4ed00"},
+    {file = "torchaudio-2.5.1-cp39-cp39-win_amd64.whl", hash = "sha256:0be6d6f5127b17f9f1ac33fb02c8f1127bfea955de630c5cab6eb9daaef4db6d"},
+]
+
+[package.dependencies]
+torch = "2.5.1"
+
+[[package]]
 name = "torchsde"
 version = "0.2.6"
 description = "SDE solvers and stochastic adjoint sensitivity analysis in PyTorch."
@@ -3942,4 +3971,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10, <3.11"
-content-hash = "5e2c32b71df249cd86b4c8e47945ac2fa9a91a456901eb2a11a0551c9e94688c"
+content-hash = "effbbc5c78726a85ced752310d3fefd24ff0d5b60e258b69d1d72ae46fc70306"

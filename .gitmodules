@@ -1,0 +1,7 @@
+[submodule "custom_nodes/ComfyUI-PuLID-Flux-Enhanced"]
+	path = custom_nodes/ComfyUI-PuLID-Flux-Enhanced
+	url = https://github.com/sipie800/ComfyUI-PuLID-Flux-Enhanced
+
+[submodule "custom_nodes/ComfyUI-to-Python-Extension"]
+	path = custom_nodes/ComfyUI-to-Python-Extension
+	url = https://github.com/pydn/ComfyUI-to-Python-Extension

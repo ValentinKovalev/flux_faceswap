@@ -13,6 +13,10 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
  - install python 3.10
  - export HF_TOKEN=your_huggingface_token
  - export OPENAI_API_KEY=your_openai_api_key
+ - initialize git submodules:
+ ```bash
+ git submodule update --init --recursive
+ ```
  - install poetry
  - ```poetry install``` using .lock file
  - ```poetry run python download_models.py```
@@ -33,7 +37,7 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
 ## Examples
 
 ### Input Images
-![Source Face](input/example.png)
+![Source Face](input/example1.png)
 ![Target Image](input/img_face01.webp)
 
 ### Faceswap Results

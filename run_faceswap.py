@@ -7,10 +7,10 @@ original_args = sys.argv.copy()
 
 parser = argparse.ArgumentParser(description="Run face swap pipeline", add_help=False)
 parser.add_argument(
-    "--input-image", default="input/image2.webp", type=str, required=False, help="Path to input image"
+    "--input-image", default="input/example1.png", type=str, required=False, help="Path to input image"
 )
 parser.add_argument(
-    "--face-image", default="input/example_face.jpg", type=str, required=False, help="Path to face image to swap"
+    "--face-image", default="input/img_face01.webp", type=str, required=False, help="Path to face image to swap"
 )
 parser.add_argument(
     "--prompt", type=str, required=False, help="Custom prompt for generation (optional)"
