@@ -9,6 +9,7 @@ A project for face swapping using ComfyUI and Stable Diffusion. Supports face sw
 - Using inpainting model to generate face
 - Using lora for realism and better results
 - Add finetuned lora on a bunch of photos at workflow level, results are below
+- Used [replicate](https://replicate.com/ostris/flux-dev-lora-trainer/train) to train lora with bunch of face images (have no GPU and my time to experiment), could be improved using python-based training pipeline and tuning parameters. [Checkpoint for identity from example link](https://huggingface.co/KvLove/lora_exp). Could be used in ComfyUI workflow, not added to code now.
 
 ## Installation
  - install python 3.10
